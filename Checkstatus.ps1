@@ -30,17 +30,38 @@ $MemoryDataMap.GetEnumerator() | ForEach-Object {
 Write-Output "------------------------------------"
 Write-Output "Disk Usage"
 Write-Output "------------------------------------"
-$Disk = Get-CimInstance -ClassName Win32_LogicalDisk
-$DiskDataMap = [ordered]@{
-    DiskSize = $Disk.Size
-    FreeSpace = $Disk.FreeSpace
-    UsedSpace = $Disk.Size - $Disk.FreeSpace
-    ProcentLoad = ($Disk.Size - $Disk.FreeSpace) / $Disk.Size * 100
+$Disks = Get-CimInstance -ClassName Win32_LogicalDisk
+
+$Disks | ForEach-Object {
+    $DiskDataMap = [ordered]@{
+        DiskName = $_.DeviceID
+        DiskSize = $_.Size
+        FreeSpace = $_.FreeSpace
+        UsedSpace = $_.Size - $_.FreeSpace
+        ProcentLoad = "{0}%" -f (($_.Size - $_.FreeSpace) / $_.Size * 100)
+    }
+
+    Write-Output "------------------------------------"
+    Write-Output "Disk Data"
+    $DiskDataMap.GetEnumerator() | ForEach-Object {
+        Write-Output ("{0}: {1}" -f $_.Key, $_.Value)
+    }
 }
-$DiskDataMap.GetEnumerator() | ForEach-Object {
-    Write-Output ("{0}: {1}" -f $_.Key, $_.Value)
+Write-Output "------------------------------------"
+Write-Output "Top 5 processes by CPU usage"
+Write-Output "------------------------------------"
+
+
+$CpuProcess = Get-Process | Sort-Object CPU -Descending | Select-Object -First 5 Name, CPU
+$CpuProcess | ForEach-Object {
+    Write-Output ("{0}: {1}" -f $_.Name, $_.CPU)
 }
-#Top 5 processes by CPU usage
-Get-Process | Sort-Object CPU -Descending | Select-Object -First 5 Name, CPU
-#Top 5 processes by Memory usage
-Get-Process | Sort-Object WorkingSet64 -Descending | Select-Object -First 5 Name, @{Name="MemoryMB";Expression={[math]::round($_.WorkingSet64 / 1MB, 2)}}
+
+Write-Output "------------------------------------"
+Write-Output "------------------------------------"
+Write-Output "Top 5 processes by memory usage"
+Write-Output "------------------------------------"
+$Memoryprocess = Get-Process | Sort-Object WorkingSet64 -Descending | Select-Object -First 5 Name, @{Name="MemoryMB";Expression={[math]::round($_.WorkingSet64 / 1MB, 2)}}
+$Memoryprocess | ForEach-Object {
+    Write-Output ("{0}: {1}MB" -f $_.Name, $_.MemoryMB)
+}
