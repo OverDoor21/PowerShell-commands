@@ -1,9 +1,18 @@
-This simple script will shot current load and data on your windwos machine. 
-Idea for imspired by https://roadmap.sh/projects/server-stats
+# Windows Machine Resource Monitor
 
-## With such requirenemts
-  ⚫Total CPU usage
-  ⚫Total memory usage (Free vs Used including percentage)
-  ⚫Total disk usage (Free vs Used including percentage)
-  ⚫Top 5 processes by CPU usage
-  ⚫Top 5 processes by memory usage
+This simple PowerShell script provides real-time insights into the resource usage of your Windows machine. It reports the current load and data, allowing you to monitor key system metrics easily.
+
+Inspired by [Server Stats Roadmap](https://roadmap.sh/projects/server-stats), this script delivers essential information in a straightforward format.
+
+## Features
+
+- ⚫ **Total CPU Usage**: Displays the current CPU load percentage.
+- ⚫ **Total Memory Usage**: Shows total, free, and used memory, including the percentage of memory in use.
+- ⚫ **Total Disk Usage**: Provides details on disk space usage, showing total, free, and used disk space, including the usage percentage.
+- ⚫ **Top 5 Processes by CPU Usage**: Lists the top five processes consuming the most CPU resources.
+- ⚫ **Top 5 Processes by Memory Usage**: Lists the top five processes consuming the most memory.
+
+## Requirements
+
+- Windows operating system
+- PowerShell (version 5.0 or higher recommended)
